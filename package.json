@@ -1,0 +1,15 @@
+{
+  "name": "rigroute",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Truck-aware map: clearance-safe routing, forum-sourced hazard intel, voice route prompts.",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "optionalDependencies": {
+    "@anthropic-ai/sdk": "^1.12.0"
+  }
+}

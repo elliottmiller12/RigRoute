@@ -1,0 +1,927 @@
+{
+ "version": 1,
+ "updated": "2026-11-22",
+ "note": "Seed intel. Bridge coordinates come from the Wikipedia list (3 decimals, ~100 m). Entries marked exact:false are approximate areas used for warnings only, never for route exclusions.",
+ "hazards": [
+  {
+   "id": "bridge-1",
+   "type": "low_clearance",
+   "name": "Concord Covered Bridge",
+   "place": "Smyrna, GA",
+   "lat": 33.849,
+   "lon": -84.558,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 84,
+   "advice": "Posted about 7'0\". 7 ft entrance; covered bridge. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-2",
+   "type": "low_clearance",
+   "name": "Mechanic Street Bridge",
+   "place": "Lancaster, NH",
+   "lat": 44.487,
+   "lon": -71.564,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 96,
+   "advice": "Posted about 8'0\". Wooden covered bridge; closed after repeated strikes. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-3",
+   "type": "low_clearance",
+   "name": "Onondaga Lake Parkway rail bridge",
+   "place": "Syracuse, NY",
+   "lat": 43.091,
+   "lon": -76.194,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 129,
+   "advice": "Posted about 10'9\". Listed as hit more than any other bridge in the US. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-4",
+   "type": "low_clearance",
+   "name": "Park Street underpass (NY 370)",
+   "place": "Syracuse, NY",
+   "lat": 43.075,
+   "lon": -76.172,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 146,
+   "advice": "Posted about 12'2\". Rail underpass on NY 370. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-5",
+   "type": "low_clearance",
+   "name": "Independence Avenue rail bridge",
+   "place": "Kansas City, MO",
+   "lat": 39.105,
+   "lon": -94.513,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 144,
+   "advice": "Posted about 12'0\". Rail bridge near Wilson Road. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-6",
+   "type": "low_clearance",
+   "name": "Norfolk Southern–Gregson St overpass (\"11foot8\")",
+   "place": "Durham, NC",
+   "lat": 35.999,
+   "lon": -78.91,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 148,
+   "advice": "Posted about 12'4\". Raised to 12'4\" in 2019; still gets hit. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-7",
+   "type": "low_clearance",
+   "name": "N. Carolina Street underpass",
+   "place": "Goldsboro, NC",
+   "lat": 35.39,
+   "lon": -78.001,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 90,
+   "advice": "Posted about 7'6\". Repeated strikes 2022–2026. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-8",
+   "type": "low_clearance",
+   "name": "Robert Parker Coffin Bridge",
+   "place": "Long Grove, IL",
+   "lat": 42.178,
+   "lon": -88.0,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 102,
+   "advice": "Posted about 8'6\". Single-lane covered bridge. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-9",
+   "type": "low_clearance",
+   "name": "Laurel Avenue overpass",
+   "place": "Johnstown, PA",
+   "lat": 40.349,
+   "lon": -78.943,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 140,
+   "advice": "Posted about 11'8\". Estimated hit about once a month. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-10",
+   "type": "low_clearance",
+   "name": "Casho Mill Road underpass",
+   "place": "Newark, DE",
+   "lat": 39.676,
+   "lon": -75.774,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 103,
+   "advice": "Posted about 8'7\". Low rail underpass despite warning devices. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-11",
+   "type": "low_clearance",
+   "name": "Chapel Street rail bridge",
+   "place": "Newark, DE",
+   "lat": 39.687,
+   "lon": -75.746,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 144,
+   "advice": "Posted about 12'0\". Rail bridge. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-12",
+   "type": "low_clearance",
+   "name": "West Central Ave underpass (SR 37)",
+   "place": "Delaware, OH",
+   "lat": 40.304,
+   "lon": -83.083,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 151,
+   "advice": "Posted about 12'7\". Sensor-triggered signs since 2018. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-13",
+   "type": "low_clearance",
+   "name": "N. Washington St underpass (SR 231)",
+   "place": "Tiffin, OH",
+   "lat": 41.119,
+   "lon": -83.177,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 132,
+   "advice": "Posted about 11'0\". Local \"can opener\". Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-14",
+   "type": "low_clearance",
+   "name": "Karl Brown Way underpass",
+   "place": "Loveland, OH",
+   "lat": 39.267,
+   "lon": -84.26,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 96,
+   "advice": "Posted about 8'0\". Laser-triggered lights and siren. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-15",
+   "type": "low_clearance",
+   "name": "Linden Avenue underpass",
+   "place": "Zanesville, OH",
+   "lat": 39.942,
+   "lon": -82.014,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 115,
+   "advice": "Posted about 9'7\". 9'7\" main road; northbound bypass is 12'5\". 126 hits 2020–2022. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-16",
+   "type": "low_clearance",
+   "name": "Third Street underpass (Alt US 60 / KY 1020)",
+   "place": "Louisville, KY",
+   "lat": 38.211,
+   "lon": -85.763,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 140,
+   "advice": "Posted about 11'8\". Local \"can opener\". Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-17",
+   "type": "low_clearance",
+   "name": "Carters Creek Pike rail bridge (SR 246)",
+   "place": "Columbia, TN",
+   "lat": 35.678,
+   "lon": -87.012,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 130,
+   "advice": "Posted about 10'10\". \"Carters Creek Can Opener\". Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-18",
+   "type": "low_clearance",
+   "name": "East Maine Street bridge",
+   "place": "Enid, OK",
+   "lat": 36.395,
+   "lon": -97.876,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 136,
+   "advice": "Posted about 11'4\". Painted with shark teeth to warn tall trucks. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-19",
+   "type": "low_clearance",
+   "name": "Needles Underpass (K St, old Route 66)",
+   "place": "Needles, CA",
+   "lat": 34.843,
+   "lon": -114.611,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 96,
+   "advice": "Posted about 8'0\". Barriers added 2023. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-20",
+   "type": "low_clearance",
+   "name": "Main St underpass, Metuchen Station (CR 531)",
+   "place": "Metuchen, NJ",
+   "lat": 40.541,
+   "lon": -74.361,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 134,
+   "advice": "Posted about 11'2\". 55 over-height strikes 2012–2016. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-21",
+   "type": "low_clearance",
+   "name": "\"The Ripper\" (Big Lake Rd)",
+   "place": "Council Bluffs, IA",
+   "lat": 41.285,
+   "lon": -95.864,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 104,
+   "advice": "Posted about 8'8\". About 40 roof strikes since 2020. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-22",
+   "type": "low_clearance",
+   "name": "Davenport \"truck-eating bridge\" (Bus. US 61)",
+   "place": "Davenport, IA",
+   "lat": 41.525,
+   "lon": -90.577,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 140,
+   "advice": "Posted about 11'8\". Old rail bridge. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-23",
+   "type": "low_clearance",
+   "name": "North Grant Ave bridge",
+   "place": "Springfield, MO",
+   "lat": 37.23,
+   "lon": -93.298,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 138,
+   "advice": "Posted about 11'6\". 11'6\" center lane, 13'6\" outer lanes; signs called confusing. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-24",
+   "type": "low_clearance",
+   "name": "Trampe Avenue underpass",
+   "place": "Spanish Lake, MO",
+   "lat": 38.789,
+   "lon": -90.206,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 138,
+   "advice": "Posted about 11'6\". BNSF rail underpass. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-25",
+   "type": "low_clearance",
+   "name": "McDowell St underpass (WV 16)",
+   "place": "Welch, WV",
+   "lat": 37.436,
+   "lon": -81.587,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 108,
+   "advice": "Posted about 9'0\". 9' main road; truck bypass is 12'11\". Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "bridge-26",
+   "type": "low_clearance",
+   "name": "\"Big Penny\" underpass",
+   "place": "Lansing, MI",
+   "lat": 42.719,
+   "lon": -84.538,
+   "radiusM": 250,
+   "exact": true,
+   "clearanceIn": 144,
+   "advice": "Posted about 12'0\". 57 documented strikes 2015–2025. Known strike location: do not trust the sign alone.",
+   "sources": [
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "boston-river-1",
+   "type": "no_trucks",
+   "name": "Storrow Dr / Soldiers Field Rd (\"Storrowing\")",
+   "place": "Boston, MA",
+   "lat": 42.3631,
+   "lon": -71.0726,
+   "radiusM": 70,
+   "exact": false,
+   "clearanceIn": 108,
+   "advice": "Cars only: no trucks, buses or moving vans. Bridges as low as 9'. Strikes spike around college move-in. Use Beacon St, Comm Ave or the Mass Pike instead.",
+   "sources": [
+    {
+     "title": "Mass.gov: DCR river road height restrictions",
+     "url": "https://www.mass.gov/info-details/alert-for-fifa-tourists-and-travelers-on-dcr-river-road-height-restrictions"
+    },
+    {
+     "title": "Storrow Drive (Wikiwand)",
+     "url": "https://www.wikiwand.com/en/articles/Storrow_Drive"
+    },
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "boston-river-2",
+   "type": "no_trucks",
+   "name": "Storrow Dr / Soldiers Field Rd (\"Storrowing\")",
+   "place": "Boston, MA",
+   "lat": 42.3571,
+   "lon": -71.0788,
+   "radiusM": 70,
+   "exact": false,
+   "clearanceIn": 108,
+   "advice": "Cars only: no trucks, buses or moving vans. Bridges as low as 9'. Strikes spike around college move-in. Use Beacon St, Comm Ave or the Mass Pike instead.",
+   "sources": [
+    {
+     "title": "Mass.gov: DCR river road height restrictions",
+     "url": "https://www.mass.gov/info-details/alert-for-fifa-tourists-and-travelers-on-dcr-river-road-height-restrictions"
+    },
+    {
+     "title": "Storrow Drive (Wikiwand)",
+     "url": "https://www.wikiwand.com/en/articles/Storrow_Drive"
+    },
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "boston-river-3",
+   "type": "no_trucks",
+   "name": "Storrow Dr / Soldiers Field Rd (\"Storrowing\")",
+   "place": "Boston, MA",
+   "lat": 42.3525,
+   "lon": -71.089,
+   "radiusM": 70,
+   "exact": false,
+   "clearanceIn": 108,
+   "advice": "Cars only: no trucks, buses or moving vans. Bridges as low as 9'. Strikes spike around college move-in. Use Beacon St, Comm Ave or the Mass Pike instead.",
+   "sources": [
+    {
+     "title": "Mass.gov: DCR river road height restrictions",
+     "url": "https://www.mass.gov/info-details/alert-for-fifa-tourists-and-travelers-on-dcr-river-road-height-restrictions"
+    },
+    {
+     "title": "Storrow Drive (Wikiwand)",
+     "url": "https://www.wikiwand.com/en/articles/Storrow_Drive"
+    },
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "boston-river-4",
+   "type": "no_trucks",
+   "name": "Storrow Dr / Soldiers Field Rd (\"Storrowing\")",
+   "place": "Boston, MA",
+   "lat": 42.351,
+   "lon": -71.099,
+   "radiusM": 70,
+   "exact": false,
+   "clearanceIn": 108,
+   "advice": "Cars only: no trucks, buses or moving vans. Bridges as low as 9'. Strikes spike around college move-in. Use Beacon St, Comm Ave or the Mass Pike instead.",
+   "sources": [
+    {
+     "title": "Mass.gov: DCR river road height restrictions",
+     "url": "https://www.mass.gov/info-details/alert-for-fifa-tourists-and-travelers-on-dcr-river-road-height-restrictions"
+    },
+    {
+     "title": "Storrow Drive (Wikiwand)",
+     "url": "https://www.wikiwand.com/en/articles/Storrow_Drive"
+    },
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "boston-river-5",
+   "type": "no_trucks",
+   "name": "Storrow Dr / Soldiers Field Rd (\"Storrowing\")",
+   "place": "Boston, MA",
+   "lat": 42.3528,
+   "lon": -71.108,
+   "radiusM": 70,
+   "exact": false,
+   "clearanceIn": 108,
+   "advice": "Cars only: no trucks, buses or moving vans. Bridges as low as 9'. Strikes spike around college move-in. Use Beacon St, Comm Ave or the Mass Pike instead.",
+   "sources": [
+    {
+     "title": "Mass.gov: DCR river road height restrictions",
+     "url": "https://www.mass.gov/info-details/alert-for-fifa-tourists-and-travelers-on-dcr-river-road-height-restrictions"
+    },
+    {
+     "title": "Storrow Drive (Wikiwand)",
+     "url": "https://www.wikiwand.com/en/articles/Storrow_Drive"
+    },
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "boston-river-6",
+   "type": "no_trucks",
+   "name": "Storrow Dr / Soldiers Field Rd (\"Storrowing\")",
+   "place": "Boston, MA",
+   "lat": 42.361,
+   "lon": -71.13,
+   "radiusM": 70,
+   "exact": false,
+   "clearanceIn": 108,
+   "advice": "Cars only: no trucks, buses or moving vans. Bridges as low as 9'. Strikes spike around college move-in. Use Beacon St, Comm Ave or the Mass Pike instead.",
+   "sources": [
+    {
+     "title": "Mass.gov: DCR river road height restrictions",
+     "url": "https://www.mass.gov/info-details/alert-for-fifa-tourists-and-travelers-on-dcr-river-road-height-restrictions"
+    },
+    {
+     "title": "Storrow Drive (Wikiwand)",
+     "url": "https://www.wikiwand.com/en/articles/Storrow_Drive"
+    },
+    {
+     "title": "Wikipedia: List of bridges known for strikes",
+     "url": "https://en.wikipedia.org/wiki/List_of_bridges_known_for_strikes"
+    }
+   ]
+  },
+  {
+   "id": "ny-ct-parkways",
+   "type": "no_trucks_named",
+   "name": "NY / CT parkways (Hutch, Saw Mill, Taconic, Southern & Northern State, Merritt…)",
+   "place": "NYC metro, Long Island, Westchester, SW Connecticut",
+   "bbox": [
+    40.45,
+    -74.35,
+    41.75,
+    -71.75
+   ],
+   "roadPattern": "(parkway|pkwy)",
+   "advice": "Commercial vehicles are banned on these parkways and the overpasses are low. Truckers report NY-area posted clearances can be off by about a foot.",
+   "sources": [
+    {
+     "title": "NYC DOT: Know your height",
+     "url": "https://www.nyc.gov/html/dot/downloads/pdf/know-your-height.pdf"
+    },
+    {
+     "title": "CT Mirror: The Merritt Parkway is not for trucks",
+     "url": "https://ctmirror.org/2022/07/24/the-merritt-parkway-is-not-for-trucks/"
+    },
+    {
+     "title": "FreightWaves: parkway overpass strikes near New York",
+     "url": "https://www.freightwaves.com/news/trucks-striking-overpasses-westchester"
+    }
+   ]
+  },
+  {
+   "id": "eisenhower-hazmat",
+   "type": "hazmat_restricted",
+   "name": "Eisenhower–Johnson Tunnel, I-70",
+   "place": "Summit/Clear Creek line, CO",
+   "lat": 39.6785,
+   "lon": -105.92,
+   "radiusM": 1500,
+   "exact": true,
+   "advice": "Hazmat loads are not allowed in the tunnel: use Loveland Pass (US 6). If Loveland is closed, CDOT escorts hazmat through, usually at the top of the hour. Approach grades are about 7%.",
+   "sources": [
+    {
+     "title": "Wikipedia: Eisenhower Tunnel",
+     "url": "https://en.wikipedia.org/wiki/Eisenhower_Tunnel"
+    },
+    {
+     "title": "CDOT: Eisenhower Tunnel metering",
+     "url": "https://www.codot.gov/travel/ejmt/metering"
+    }
+   ]
+  },
+  {
+   "id": "i70-chain-law",
+   "type": "chain_law",
+   "name": "I-70 mountain corridor (Eisenhower Tunnel, Vail & Loveland Passes)",
+   "place": "Colorado",
+   "lat": 39.62,
+   "lon": -106.05,
+   "radiusM": 30000,
+   "exact": false,
+   "season": [
+    9,
+    10,
+    11,
+    12,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "advice": "Colorado runs some of the strictest commercial chain laws; heavy storms and 60+ mph gusts. Carry chains Sept–May and check CDOT/COtrip before the climb.",
+   "sources": [
+    {
+     "title": "FreightWaves: America's most dangerous roads for truckers, part 3",
+     "url": "https://www.freightwaves.com/news/americas-most-dangerous-roads-for-truckers-part-3"
+    },
+    {
+     "title": "Overdrive: White-knuckle roads",
+     "url": "https://www.overdriveonline.com/white-knuckle-roads/"
+    }
+   ]
+  },
+  {
+   "id": "monteagle",
+   "type": "steep_grade",
+   "name": "Monteagle grade, I-24",
+   "place": "Monteagle, TN",
+   "lat": 35.215,
+   "lon": -85.81,
+   "radiusM": 5000,
+   "exact": false,
+   "advice": "Eastbound: about 6% for ~4 mi (max 6.9%). Truck limit 45 mph, inspection station at the top, two runaway ramps below. Gear down before the crest.",
+   "sources": [
+    {
+     "title": "Wikipedia: Monteagle Mountain",
+     "url": "https://en.wikipedia.org/wiki/Monteagle_Mountain"
+    },
+    {
+     "title": "Overdrive: White-knuckle roads",
+     "url": "https://www.overdriveonline.com/white-knuckle-roads/"
+    },
+    {
+     "title": "TruckersReport: most dangerous roads / mountain passes",
+     "url": "https://www.thetruckersreport.com/truckingindustryforum/threads/what-are-the-most-dangerous-roads-mountain-passes-in-the-lower-48.223266/"
+    }
+   ]
+  },
+  {
+   "id": "cabbage-hill",
+   "type": "steep_grade",
+   "name": "Cabbage Hill (Emigrant Hill), I-84",
+   "place": "West of La Grande, OR",
+   "lat": 45.625,
+   "lon": -118.565,
+   "radiusM": 7000,
+   "exact": false,
+   "advice": "~7-mile downgrade with a double hairpin; snow, fog and black ice. Escape ramps around mileposts 220–221.",
+   "sources": [
+    {
+     "title": "Overdrive: White-knuckle roads",
+     "url": "https://www.overdriveonline.com/white-knuckle-roads/"
+    },
+    {
+     "title": "TruckersReport: most dangerous roads / mountain passes",
+     "url": "https://www.thetruckersreport.com/truckingindustryforum/threads/what-are-the-most-dangerous-roads-mountain-passes-in-the-lower-48.223266/"
+    }
+   ]
+  },
+  {
+   "id": "siskiyou",
+   "type": "steep_grade",
+   "name": "Siskiyou Summit, I-5",
+   "place": "Near the CA/OR line",
+   "lat": 42.075,
+   "lon": -122.6,
+   "radiusM": 6000,
+   "exact": false,
+   "advice": "Called the steepest interstate grade in the country; winter closures are common.",
+   "sources": [
+    {
+     "title": "Overdrive: White-knuckle roads",
+     "url": "https://www.overdriveonline.com/white-knuckle-roads/"
+    }
+   ]
+  },
+  {
+   "id": "vail-pass",
+   "type": "steep_grade",
+   "name": "Vail Pass, I-70",
+   "place": "Colorado",
+   "lat": 39.531,
+   "lon": -106.217,
+   "radiusM": 7000,
+   "exact": false,
+   "advice": "Notorious for chain-law days and steep descents.",
+   "sources": [
+    {
+     "title": "Overdrive: White-knuckle roads",
+     "url": "https://www.overdriveonline.com/white-knuckle-roads/"
+    },
+    {
+     "title": "FreightWaves: America's most dangerous roads for truckers, part 3",
+     "url": "https://www.freightwaves.com/news/americas-most-dangerous-roads-for-truckers-part-3"
+    }
+   ]
+  },
+  {
+   "id": "wolf-creek",
+   "type": "steep_grade",
+   "name": "Wolf Creek Pass, US-160",
+   "place": "Colorado",
+   "lat": 37.483,
+   "lon": -106.8,
+   "radiusM": 7000,
+   "exact": false,
+   "advice": "Two-lane, twisty, heavy snow; slow in winter.",
+   "sources": [
+    {
+     "title": "Overdrive: White-knuckle roads",
+     "url": "https://www.overdriveonline.com/white-knuckle-roads/"
+    }
+   ]
+  },
+  {
+   "id": "rabbit-ears",
+   "type": "steep_grade",
+   "name": "Rabbit Ears Pass, US-40",
+   "place": "Near Steamboat Springs, CO",
+   "lat": 40.38,
+   "lon": -106.62,
+   "radiusM": 7000,
+   "exact": false,
+   "advice": "Narrow in places; commercial trucks frequently required to chain up.",
+   "sources": [
+    {
+     "title": "Overdrive: White-knuckle roads",
+     "url": "https://www.overdriveonline.com/white-knuckle-roads/"
+    }
+   ]
+  },
+  {
+   "id": "jellico",
+   "type": "steep_grade",
+   "name": "Jellico grade, I-75",
+   "place": "TN/KY line",
+   "lat": 36.56,
+   "lon": -84.13,
+   "radiusM": 8000,
+   "exact": false,
+   "advice": "Drivers put it around 4%: long pull, watch your brakes on the way down.",
+   "sources": [
+    {
+     "title": "TruckersReport: most dangerous roads / mountain passes",
+     "url": "https://www.thetruckersreport.com/truckingindustryforum/threads/what-are-the-most-dangerous-roads-mountain-passes-in-the-lower-48.223266/"
+    }
+   ]
+  },
+  {
+   "id": "donner",
+   "type": "steep_grade",
+   "name": "Donner Pass, I-80",
+   "place": "Sierra Nevada, CA",
+   "lat": 39.32,
+   "lon": -120.33,
+   "radiusM": 8000,
+   "exact": false,
+   "advice": "Chain controls and closures in winter storms.",
+   "sources": [
+    {
+     "title": "TruckersReport: most dangerous roads / mountain passes",
+     "url": "https://www.thetruckersreport.com/truckingindustryforum/threads/what-are-the-most-dangerous-roads-mountain-passes-in-the-lower-48.223266/"
+    }
+   ]
+  },
+  {
+   "id": "i80-wy-wind",
+   "type": "high_wind",
+   "name": "I-80 Laramie–Rawlins–Utah line (\"Snow Chi Minh Trail\")",
+   "place": "Southern Wyoming",
+   "lat": 41.6,
+   "lon": -106.3,
+   "radiusM": 60000,
+   "exact": false,
+   "season": [
+    10,
+    11,
+    12,
+    1,
+    2,
+    3
+   ],
+   "advice": "50–75 mph winds tip empty and light trailers; whiteout closures can last 24 hours. If you're light, wait it out. Check WYDOT before you commit.",
+   "sources": [
+    {
+     "title": "FreightWaves: America's most dangerous roads for truckers, part 3",
+     "url": "https://www.freightwaves.com/news/americas-most-dangerous-roads-for-truckers-part-3"
+    },
+    {
+     "title": "Overdrive: White-knuckle roads",
+     "url": "https://www.overdriveonline.com/white-knuckle-roads/"
+    }
+   ]
+  },
+  {
+   "id": "i75-fog-tn",
+   "type": "caution",
+   "name": "I-75 fog zone north of Chattanooga",
+   "place": "Near Calhoun, TN",
+   "lat": 35.3,
+   "lon": -84.75,
+   "radiusM": 15000,
+   "exact": false,
+   "advice": "Dense fog area with a history of big pileups; fog-sensing speed signs installed. Get off and wait it out rather than push through.",
+   "sources": [
+    {
+     "title": "Overdrive: White-knuckle roads",
+     "url": "https://www.overdriveonline.com/white-knuckle-roads/"
+    }
+   ]
+  },
+  {
+   "id": "i26-sc",
+   "type": "caution",
+   "name": "I-26 Orangeburg–Charleston",
+   "place": "South Carolina",
+   "lat": 33.2,
+   "lon": -80.4,
+   "radiusM": 35000,
+   "exact": false,
+   "advice": "South Carolina's top interstate for crashes and deaths in 2018; steep ditches and few guardrails on some stretches.",
+   "sources": [
+    {
+     "title": "FreightWaves: America's most dangerous roads for truckers, part 3",
+     "url": "https://www.freightwaves.com/news/americas-most-dangerous-roads-for-truckers-part-3"
+    }
+   ]
+  }
+ ]
+}

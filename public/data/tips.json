@@ -1,0 +1,116 @@
+{
+ "tips": [
+  {
+   "id": "profile",
+   "text": "Set your real height, weight and length. Most \"GPS sent me under a bridge\" stories trace back to default truck settings.",
+   "sources": [
+    {
+     "title": "TruckersReport: Unsafe GPS truck route (Garmin Dezl)",
+     "url": "https://www.thetruckersreport.com/truckingindustryforum/threads/unsafe-gps-truck-route-garmin-dezl.2492165/page-5"
+    },
+    {
+     "title": "TruckersReport: Best GPS for truckers?",
+     "url": "https://www.thetruckersreport.com/truckingindustryforum/posts/13118839"
+    }
+   ]
+  },
+  {
+   "id": "13-6",
+   "text": "Treat 13'6\" as the minimum for a standard van, and give NY-area posted clearances extra room: drivers report signs about a foot off.",
+   "sources": [
+    {
+     "title": "TruckersReport: Unsafe GPS truck route (Garmin Dezl)",
+     "url": "https://www.thetruckersreport.com/truckingindustryforum/threads/unsafe-gps-truck-route-garmin-dezl.2492165/"
+    }
+   ]
+  },
+  {
+   "id": "last-mile",
+   "text": "Scout the last mile on satellite/Street View before you go, and navigate to a dropped pin at the actual truck entrance, not the street address.",
+   "sources": [
+    {
+     "title": "TruckersReport: Unsafe GPS truck route (Garmin Dezl)",
+     "url": "https://www.thetruckersreport.com/truckingindustryforum/threads/unsafe-gps-truck-route-garmin-dezl.2492165/"
+    },
+    {
+     "title": "TruckingTruth: Use your satellite view before getting into trouble",
+     "url": "https://truckingtruth.com/truckers-forum/Topic-32230/Page-1/use-your-satellite-view-before-getting-into-trouble"
+    }
+   ]
+  },
+  {
+   "id": "atlas",
+   "text": "Cross-check the route with a truckers' road atlas. Experienced drivers treat any GPS, this one included, as a second opinion.",
+   "sources": [
+    {
+     "title": "TruckersReport: TruckerPath as a truck GPS, is it worth it?",
+     "url": "https://www.thetruckersreport.com/truckingindustryforum/posts/13110467"
+    }
+   ]
+  },
+  {
+   "id": "shortest",
+   "text": "Never use \"shortest distance\" routing in a truck. It's behind a lot of the strange back-road routes drivers complain about.",
+   "sources": [
+    {
+     "title": "TruckersReport: Garmin GPS lets me down again",
+     "url": "https://www.thetruckersreport.com/truckingindustryforum/posts/11572772"
+    }
+   ]
+  },
+  {
+   "id": "new-signs",
+   "text": "New developments put up weight-limit and no-truck signs long before maps catch up. The sign on the pole wins.",
+   "sources": [
+    {
+     "title": "TruckersReport: Best GPS for truckers?",
+     "url": "https://www.thetruckersreport.com/truckingindustryforum/posts/13118839"
+    }
+   ]
+  },
+  {
+   "id": "closures",
+   "text": "A GPS may show a one-direction closure as a full closure and detour you for nothing. Check the state 511 before you take a long detour.",
+   "sources": [
+    {
+     "title": "TruckersReport: Garmin GPS lets me down again",
+     "url": "https://www.thetruckersreport.com/truckingindustryforum/posts/11572772"
+    }
+   ]
+  },
+  {
+   "id": "parking",
+   "text": "Parking is drivers' #1 issue in ATRI's 2024 survey, and drivers average about 56 minutes a day looking for a spot. Pick your shutdown spot early.",
+   "sources": [
+    {
+     "title": "FreightWaves: ATRI survey, drivers and carriers see top issues differently",
+     "url": "https://www.freightwaves.com/news/atri-survey-drivers-and-carriers-see-top-issues-in-trucking-differently"
+    },
+    {
+     "title": "FreightWaves: US economy tops trucking's list of challenges",
+     "url": "https://www.freightwaves.com/news/us-economy-tops-trucking-industrys-list-of-challenges"
+    }
+   ]
+  },
+  {
+   "id": "grades",
+   "text": "On long downgrades, pick your gear before the crest (lower the heavier you are) and know where the runaway ramps are.",
+   "sources": [
+    {
+     "title": "Overdrive: White-knuckle roads",
+     "url": "https://www.overdriveonline.com/white-knuckle-roads/"
+    }
+   ]
+  },
+  {
+   "id": "wind",
+   "text": "Running light or empty through high-wind corridors like I-80 in Wyoming? Waiting it out beats lying on your side.",
+   "sources": [
+    {
+     "title": "FreightWaves: America's most dangerous roads, part 3",
+     "url": "https://www.freightwaves.com/news/americas-most-dangerous-roads-for-truckers-part-3"
+    }
+   ]
+  }
+ ]
+}

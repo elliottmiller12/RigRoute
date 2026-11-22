@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="theme-color" content="#0a1820">
+<meta name="color-scheme" content="dark light">
+<script src="js/mode-boot.js"></script>
+<meta name="description" content="Truck-aware routing: clearance-safe routes, hazard intel from drivers, and voice route prompts.">
+<title>RigRoute</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="vendor/maplibre-gl.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-bridge" viewBox="0 0 24 24"><path d="M2 8h20M4 8v12M20 8v12M4 13a8 5 0 0 1 16 0"/><path d="M12 2v3M10 4l2-2 2 2"/></symbol>
+  <symbol id="i-weight" viewBox="0 0 24 24"><path d="M6 8h12l2 12H4z"/><circle cx="12" cy="5" r="2.2"/><path d="M10 14h4"/></symbol>
+  <symbol id="i-notruck" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M5.5 5.5l13 13"/><path d="M7 15V10h6v5M13 12h3l1 2v1"/></symbol>
+  <symbol id="i-hazmat" viewBox="0 0 24 24"><path d="M12 2l10 10-10 10L2 12z"/><path d="M12 7.5v6"/><circle cx="12" cy="16.5" r=".6"/></symbol>
+  <symbol id="i-grade" viewBox="0 0 24 24"><path d="M2 20h20L2 7z"/><path d="M14 9l4 0M16 7v4"/></symbol>
+  <symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 9h11a3 3 0 1 0-3-3M3 15h15a3 3 0 1 1-3 3M3 12h7"/></symbol>
+  <symbol id="i-snow" viewBox="0 0 24 24"><path d="M12 2v20M4 6.5l16 11M20 6.5l-16 11M9.5 3.5 12 6l2.5-2.5M9.5 20.5 12 18l2.5 2.5"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3 22 20H2z"/><path d="M12 9.5v5"/><circle cx="12" cy="17.2" r=".6"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="5" r="2.5"/><path d="M8.5 19H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h6.5"/></symbol>
+  <symbol id="i-parking" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9.5 17V7h3.5a3 3 0 0 1 0 6H9.5"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 21h14M4 8h16M4 8l-2.5 6h5zM20 8l-2.5 6h5z"/></symbol>
+  <symbol id="i-fuel" viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M3 21h12M4 10h10M14 8l3.5 2.5V17a1.5 1.5 0 0 0 3 0V8l-3-3"/></symbol>
+  <symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 18V6M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="2"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="8.5" y="2.5" width="7" height="12" rx="3.5"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></symbol>
+  <symbol id="i-locate" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.2"/><path d="M12 1.5V5M12 19v3.5M1.5 12H5M19 12h3.5"/></symbol>
+  <symbol id="i-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4.5l3.5 4v3h-8"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="m7.5 12.5 3 3 6-6.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-sat" viewBox="0 0 24 24"><path d="M4 20 9 15M7 9l8 8M3 13l4-4 8 8-4 4zM13 3l8 8M16 3a5 5 0 0 1 5 5"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".6"/></symbol>
+</svg>
+
+<div id="map" role="region" aria-label="Map"></div>
+
+<header class="hud">
+  <div class="brand" aria-label="RigRoute"><svg class="ic"><use href="#i-truck"/></svg><span>RigRoute</span></div>
+  <div class="hud-right">
+    <button id="modeBtn" class="mode-btn" type="button" aria-label="Switch to day mode"><svg class="ic moon"><use href="#i-moon"/></svg><svg class="ic sun"><use href="#i-sun"/></svg></button>
+    <button id="profileBtn" class="rig-pill" type="button" aria-haspopup="dialog" aria-label="Edit your rig">
+      <span id="profileSummary" class="rig-text">13'6" · 80k lbs</span>
+    </button>
+  </div>
+</header>
+
+<aside id="sheet" class="sheet" data-snap="half" aria-label="Trip planner">
+  <button class="handle" id="grab" type="button" aria-label="Expand or shrink the panel"><span></span></button>
+
+  <div class="sheet-body" id="sheetBody">
+    <!-- PLAN -->
+    <section id="plan" class="view">
+      <form id="tripForm" autocomplete="off" novalidate>
+        <div class="field big-field">
+          <svg class="ic lead"><use href="#i-search"/></svg>
+          <label class="sr" for="to">Destination</label>
+          <input id="to" name="to" type="text" placeholder="Where to?" aria-label="Destination: receiver, city or truck stop" maxlength="120" enterkeyhint="search">
+          <ul class="suggest" id="toSuggest" role="listbox" hidden></ul>
+        </div>
+        <div class="field from-field">
+          <svg class="ic lead small"><use href="#i-dot"/></svg>
+          <label class="sr" for="from">Starting point</label>
+          <input id="from" name="from" type="text" placeholder="Starting point" maxlength="120">
+          <button id="locBtn" type="button" class="icon-btn" aria-label="Start from my location"><svg class="ic"><use href="#i-locate"/></svg></button>
+          <ul class="suggest" id="fromSuggest" role="listbox" hidden></ul>
+        </div>
+
+        <div class="voice">
+          <button id="micBtn" type="button" class="mic" aria-label="Tap and say how to run it">
+            <span class="ring" aria-hidden="true"></span>
+            <svg class="ic mic-on"><use href="#i-mic"/></svg>
+            <svg class="ic mic-off"><use href="#i-stop"/></svg>
+          </button>
+          <div class="voice-copy">
+            <div class="voice-title" id="micLabel">Tap and say how to run it</div>
+            <div class="voice-sub">"No tolls, stay off I-95, I'm hauling hazmat"</div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="sr" for="prompt">Route preferences</label>
+          <input id="prompt" type="text" maxlength="500" placeholder="…or type it" enterkeyhint="done">
+        </div>
+        <div id="chips" class="chips" aria-live="polite"></div>
+        <p id="promptNote" class="hint" hidden></p>
+
+        <button id="goBtn" class="go" type="submit"><svg class="ic"><use href="#i-route"/></svg><span>Route it</span></button>
+      </form>
+    </section>
+
+    <!-- BUSY -->
+    <section id="busy" class="view" hidden>
+      <div class="busy">
+        <div class="spinner" aria-hidden="true"></div>
+        <div>
+          <div class="busy-title">Building a truck-legal route</div>
+          <div id="progress" class="busy-sub" role="status" aria-live="polite">Routing with your rig…</div>
+        </div>
+      </div>
+    </section>
+
+    <div id="error" class="error" role="alert" hidden></div>
+
+    <!-- RESULTS -->
+    <section id="results" class="view" hidden>
+      <div class="res-head">
+        <button id="editBtn" class="icon-btn" type="button" aria-label="Edit trip"><svg class="ic"><use href="#i-back"/></svg></button>
+        <div class="res-title">
+          <div class="res-dest" id="resDest"></div>
+          <div class="res-nums" id="summary"></div>
+        </div>
+      </div>
+
+      <div id="verdict" class="verdict"></div>
+      <div class="strip-wrap" aria-hidden="true">
+        <div class="strip" id="strip"></div>
+        <div class="strip-ends"><span>Start</span><span id="stripEnd"></span></div>
+      </div>
+      <ul class="notes" id="notes"></ul>
+
+      <div class="seg" role="tablist" aria-label="Trip details">
+        <button role="tab" class="seg-btn active" data-tab="alerts" aria-selected="true">Hazards <b id="cntAlerts"></b></button>
+        <button role="tab" class="seg-btn" data-tab="parking" aria-selected="false">Parking <b id="cntParking"></b></button>
+        <button role="tab" class="seg-btn" data-tab="intel" aria-selected="false">Driver tips</button>
+      </div>
+      <ul class="cards" id="tab-alerts" role="tabpanel"></ul>
+      <ul class="cards" id="tab-parking" role="tabpanel" hidden></ul>
+      <ul class="cards" id="tab-intel" role="tabpanel" hidden></ul>
+
+      <a id="scoutBtn" class="ghost-btn" target="_blank" rel="noopener noreferrer"><svg class="ic"><use href="#i-sat"/></svg>Scout the receiver on satellite</a>
+    </section>
+
+    <footer class="foot">
+      <span>Map © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors · Routing by Valhalla</span>
+      <span>Posted signs and your own eyes win over any map.</span>
+    </footer>
+  </div>
+</aside>
+
+<dialog id="profileDlg" aria-labelledby="profileTitle">
+  <form method="dialog" id="profileForm">
+    <div class="dlg-head">
+      <h2 id="profileTitle">Your rig</h2>
+      <button value="cancel" type="submit" class="icon-btn" aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="presets" id="presets"></div>
+    <div class="rig-grid">
+      <div class="rig-cell wide">
+        <span class="rig-lbl">Height</span>
+        <div class="dual"><input name="hFt" type="number" min="6" max="15" step="1" inputmode="numeric" aria-label="Height feet"><span>ft</span><input name="hIn" type="number" min="0" max="11.5" step="0.5" inputmode="decimal" aria-label="Height inches"><span>in</span></div>
+      </div>
+      <label class="rig-cell wide"><span class="rig-lbl">Gross weight</span><div class="dual"><input name="weightLbs" type="number" min="5000" max="200000" step="500" inputmode="numeric"><span>lbs</span></div></label>
+      <label class="rig-cell"><span class="rig-lbl">Length</span><div class="dual"><input name="lengthFt" type="number" min="15" max="130" step="1" inputmode="numeric"><span>ft</span></div></label>
+      <label class="rig-cell"><span class="rig-lbl">Width</span><div class="dual"><input name="widthIn" type="number" min="60" max="144" step="1" inputmode="numeric"><span>in</span></div></label>
+      <label class="rig-cell"><span class="rig-lbl">Axles</span><div class="dual"><input name="axles" type="number" min="2" max="13" step="1" inputmode="numeric"></div></label>
+      <label class="rig-cell"><span class="rig-lbl">Clearance buffer</span><div class="dual"><input name="clearanceMarginIn" type="number" min="0" max="24" step="1" inputmode="numeric"><span>in</span></div></label>
+      <label class="rig-cell toggle wide"><input name="hazmat" type="checkbox"><span class="switch" aria-hidden="true"></span><span>Hazmat (placarded)</span></label>
+    </div>
+    <p class="hint">Saved on this phone only. Routes need your height plus the buffer to clear.</p>
+    <button value="save" type="submit" class="go">Save rig</button>
+  </form>
+</dialog>
+
+<script src="vendor/maplibre-gl-csp.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
