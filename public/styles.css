@@ -142,6 +142,8 @@ a { color: var(--link); }
 .place-ic { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--surface-3); color: var(--text); }
 .place-ic .ic { width: 20px; height: 20px; }
 .place-ic.k-fuel { background: var(--orange); color: var(--ink); }
+.place-ic.k-here { background: #1a73e8; color: #fff; }
+.place-ic.k-recent { background: none; border: 2px solid var(--line); color: var(--muted); }
 .place-txt { flex: 1; min-width: 0; display: grid; }
 .place-txt b { font-size: 16px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .place-txt span { color: var(--muted); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

@@ -1,6 +1,6 @@
 // App-shell cache only. Routes, tiles and API answers are never cached here,
 // so nothing about where a driver goes is stored by the service worker.
-const VERSION = 'rigroute-v5';
+const VERSION = 'rigroute-v6';
 const SHELL = [
   './', 'index.html', 'styles.css', 'manifest.webmanifest', 'icon.svg',
   'vendor/maplibre-gl.css', 'vendor/maplibre-gl-csp.js', 'vendor/maplibre-gl-csp-worker.js',

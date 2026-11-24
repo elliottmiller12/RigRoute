@@ -189,7 +189,21 @@ async function onMic() {
 
 // ---------- places ----------
 const AREA_KEY = 'rigroute.area';
-const KIND_GLYPH = { address: 'home', city: 'city', road: 'road', fuel: 'fuel', place: 'pin' };
+const RECENT_KEY = 'rigroute.recent';
+const KIND_GLYPH = { address: 'home', city: 'city', road: 'road', fuel: 'fuel', place: 'pin', recent: 'clock', here: 'locate' };
+// Recent picks stay on this phone only, never sent anywhere.
+function recentPlaces() {
+  try {
+    const a = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+    return Array.isArray(a) ? a.filter((p) => p && typeof p.label === 'string' && Number.isFinite(p.lat) && Number.isFinite(p.lon)).slice(0, 8) : [];
+  } catch { return []; }
+}
+function rememberPlace(r) {
+  if (!r || r.isHere || !Number.isFinite(r.lat)) return;
+  const keep = { title: String(r.title || r.label).slice(0, 120), sub: String(r.sub || '').slice(0, 160), label: String(r.label).slice(0, 160), kind: r.kind || 'place', lat: r.lat, lon: r.lon };
+  const list = [keep, ...recentPlaces().filter((p) => p.label !== keep.label)].slice(0, 8);
+  try { localStorage.setItem(RECENT_KEY, JSON.stringify(list)); } catch { /* fine */ }
+}
 function saveArea(p) { try { localStorage.setItem(AREA_KEY, JSON.stringify({ lat: +p.lat.toFixed(3), lon: +p.lon.toFixed(3) })); } catch { /* fine */ } }
 function savedArea() {
   try { const a = JSON.parse(localStorage.getItem(AREA_KEY) || 'null'); return a && Number.isFinite(a.lat) && Number.isFinite(a.lon) ? a : null; } catch { return null; }
@@ -213,11 +227,12 @@ function setStop(key, place) {
 }
 function syncClear(key) { document.querySelector(`[data-clear="${key}"]`).hidden = !$(key).value; }
 
-function placeRow(r, onPick) {
+function placeRow(r, onPick, glyph) {
   // Distance is always from you, so the numbers mean the same thing in both boxes.
-  const dist = state.here ? fmtDist(distanceMi(state.here, r)) : '';
-  return el('li', { role: 'option', class: 'place', tabindex: '-1', onpointerdown: (e) => { e.preventDefault(); onPick(r); }, onclick: () => onPick(r) },
-    el('span', { class: `place-ic k-${r.kind || 'place'}` }, icon(KIND_GLYPH[r.kind] || 'pin')),
+  const dist = state.here && !r.useHere ? fmtDist(distanceMi(state.here, r)) : '';
+  const k = glyph || r.kind || 'place';
+  return el('li', { role: 'option', class: 'place', tabindex: '-1', onpointerdown: (e) => { e.preventDefault(); onPick(r); } },
+    el('span', { class: `place-ic k-${k}` }, icon(KIND_GLYPH[k] || 'pin')),
     el('span', { class: 'place-txt' }, el('b', { text: r.title }), r.sub ? el('span', { text: r.sub }) : null),
     dist ? el('span', { class: 'place-dist', text: dist }) : null);
 }
@@ -227,14 +242,33 @@ function wireSearch() {
   const list = $('placeList'), note = $('searchNote'), form = $('tripForm');
   let activeKey = null, lastRes = [], seq = 0;
   const close = () => { list.hidden = true; note.hidden = true; list.replaceChildren(); form.classList.remove('searching'); activeKey = null; };
-  const pick = (r) => {
+  const pick = async (r) => {
     const key = activeKey || 'to';
+    if (r.useHere) {
+      close(); document.activeElement?.blur?.();
+      try { setStop('from', await locate()); setError(''); if (!state.stops.to) $('to').focus(); else if (isPhone()) snap('fit'); }
+      catch (e) { setError(e.message); if (isPhone()) snap('fit'); }
+      return;
+    }
+    rememberPlace(r);
     setStop(key, r);
     close();
     document.activeElement?.blur?.();
     if (state.map) state.map.flyTo({ center: [r.lon, r.lat], zoom: Math.max(state.map.getZoom(), 11), offset: isPhone() ? [0, -150] : [210, 0] });
     if (key === 'from' && !state.stops.to) $('to').focus();
     else if (isPhone()) snap('fit');
+  };
+  // Empty box: your location (for From) and the places you picked before.
+  const starter = (key) => {
+    const other = state.stops[key === 'to' ? 'from' : 'to'];
+    const rows = [];
+    if (key === 'from') rows.push([{ useHere: true, title: 'Your location', sub: state.here ? 'Using your phone’s GPS' : 'Uses your phone’s GPS' }, 'here']);
+    for (const p of recentPlaces()) if (!other || other.label !== p.label) rows.push([p, 'recent']);
+    lastRes = rows.map(([r]) => r);
+    list.replaceChildren(...rows.slice(0, 7).map(([r, g]) => placeRow(r, pick, g)));
+    list.hidden = !rows.length;
+    note.textContent = 'Type a receiver, street address, city or truck stop.';
+    note.hidden = !!rows.length;
   };
   const render = (res, q) => {
     lastRes = res;
@@ -245,7 +279,7 @@ function wireSearch() {
   };
   const search = debounce(async (key) => {
     const input = $(key), q = input.value.trim();
-    if (q.length < 3 || q === 'Your location') { list.hidden = true; note.hidden = true; return; }
+    if (q.length < 3 || q === 'Your location') { if (activeKey === key) starter(key); return; }
     const my = ++seq, near = searchNear(key);
     try {
       const res = await state.api.geocode(q, { suggest: true, near: near.point });
@@ -262,9 +296,9 @@ function wireSearch() {
       activeKey = key; form.classList.add('searching'); form.dataset.searching = key;
       if (isPhone()) snap('full');
       if (input.value === 'Your location') input.select();
-      if (input.value.trim().length >= 3 && !state.stops[key]) search(key);
+      if (input.value.trim().length >= 3 && !state.stops[key]) search(key); else starter(key);
     });
-    input.addEventListener('input', () => { state.stops[key] = null; syncClear(key); activeKey = key; search(key); });
+    input.addEventListener('input', () => { state.stops[key] = null; syncClear(key); activeKey = key; if (input.value.trim().length < 3) { ++seq; starter(key); } else search(key); });
     input.addEventListener('blur', () => setTimeout(() => { if (activeKey === key && document.activeElement !== input) { close(); if (isPhone()) snap('fit'); } }, 180));
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') { input.blur(); }
