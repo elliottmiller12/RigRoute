@@ -14,20 +14,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  # Test and package in one job; deploy in the next. Uploading and deploying in
+  # the same job raced GitHub's artifact listing ("No artifacts named github-pages").
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - run: npm test
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
 
   deploy:
-    needs: test
+    needs: build
     runs-on: ubuntu-latest
-    # Job-level permissions replace the workflow's, so restate contents/actions read:
-    # deploy-pages needs actions: read to find the artifact this job just uploaded.
     permissions:
       contents: read
       actions: read
@@ -37,10 +44,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: public
       - id: deployment
         uses: actions/deploy-pages@v4
