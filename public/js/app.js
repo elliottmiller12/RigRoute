@@ -7,6 +7,7 @@ import { nightify, isLightStyle } from './night.js';
 import { planRoute, isNoPath } from './core/planner.js';
 import { parsePrompt } from './core/parser.js';
 import { DEFAULT_PROFILE, sanitizeProfile, sanitizeOptions, describeOptions, removeChip } from './core/options.js';
+import { fmtDist, distanceMi } from './core/places.js';
 import { fmtFeetIn, M_PER_MI } from './core/units.js';
 
 const $ = (id) => document.getElementById(id);
@@ -15,7 +16,7 @@ const SVGNS = 'http://www.w3.org/2000/svg';
 const state = {
   api: null, config: null, map: null, mapReady: false, markers: [],
   profile: loadProfile(), options: {}, parsedFor: null, notes: [],
-  stops: { from: null, to: null }, seeds: [], tips: [], plan: null, busy: false, spoke: false,
+  stops: { from: null, to: null }, here: null, seeds: [], tips: [], plan: null, busy: false, spoke: false,
 };
 
 // ---------- helpers ----------
@@ -58,11 +59,12 @@ const isPhone = () => !window.matchMedia('(min-width: 900px), (orientation: land
 
 function view(name) {
   for (const v of ['plan', 'busy', 'results']) show(v, v === name);
+  $('sheet').dataset.view = name;
   $('sheetBody').scrollTop = 0;
 }
 
 // ---------- bottom sheet ----------
-const SNAPS = ['peek', 'half', 'full'];
+const SNAPS = ['peek', 'fit', 'full'];
 function snap(s) { $('sheet').dataset.snap = s; }
 function wireSheet() {
   const sheet = $('sheet'), grab = $('grab');
@@ -80,10 +82,10 @@ function wireSheet() {
   const end = () => {
     if (!dragging) return;
     dragging = false; sheet.classList.remove('dragging');
-    if (!moved) { snap(sheet.dataset.snap === 'peek' ? 'half' : sheet.dataset.snap === 'half' ? 'full' : 'half'); return; }
+    if (!moved) { const cur = sheet.dataset.snap; snap(cur === 'peek' ? 'fit' : cur === 'full' ? 'fit' : 'full'); return; }
     const h = sheet.getBoundingClientRect().height, vh = window.innerHeight;
     sheet.style.height = '';
-    snap(h < vh * 0.36 ? 'peek' : h < vh * 0.78 ? 'half' : 'full');
+    snap(h < vh * 0.32 ? 'peek' : h < vh * 0.78 ? (sheet.dataset.view === 'results' ? 'half' : 'fit') : 'full');
   };
   grab.addEventListener('pointerup', end);
   grab.addEventListener('pointercancel', end);
@@ -92,8 +94,8 @@ function wireSheet() {
     if (e.key === 'ArrowUp') { snap(SNAPS[Math.min(2, i + 1)]); e.preventDefault(); }
     if (e.key === 'ArrowDown') { snap(SNAPS[Math.max(0, i - 1)]); e.preventDefault(); }
   });
-  // Typing on a phone: give the form the whole screen so the keyboard doesn't bury it.
-  for (const id of ['to', 'from', 'prompt']) $(id).addEventListener('focus', () => { if (isPhone()) snap('full'); });
+  // Typing the preferences on a phone: lift the panel so the keyboard doesn't bury it.
+  $('prompt').addEventListener('focus', () => { if (isPhone()) snap('full'); });
 }
 
 // ---------- profile ----------
@@ -166,7 +168,7 @@ const parseSoon = debounce(parseNow, 600);
 function setMic(listening) {
   $('micBtn').classList.toggle('listening', listening);
   $('micBtn').setAttribute('aria-label', listening ? 'Stop listening' : 'Tap and say how to run it');
-  $('micLabel').textContent = listening ? 'Listening… tap to stop' : 'Tap and say how to run it';
+  $('micLabel').textContent = listening ? 'Listening… tap the mic to stop' : 'Tap the mic and say it, or type it.';
 }
 async function onMic() {
   if ($('micBtn').classList.contains('listening')) { listenOnce.stop?.(); return; }
@@ -186,54 +188,140 @@ async function onMic() {
 }
 
 // ---------- places ----------
-function wireSuggest(inputId, listId, key) {
-  const input = $(inputId), list = $(listId);
-  const close = () => { list.hidden = true; list.replaceChildren(); };
-  const search = debounce(async () => {
-    const q = input.value.trim();
-    if (q.length < 3 || q === 'My location') return close();
+const AREA_KEY = 'rigroute.area';
+const KIND_GLYPH = { address: 'home', city: 'city', road: 'road', fuel: 'fuel', place: 'pin' };
+function saveArea(p) { try { localStorage.setItem(AREA_KEY, JSON.stringify({ lat: +p.lat.toFixed(3), lon: +p.lon.toFixed(3) })); } catch { /* fine */ } }
+function savedArea() {
+  try { const a = JSON.parse(localStorage.getItem(AREA_KEY) || 'null'); return a && Number.isFinite(a.lat) && Number.isFinite(a.lon) ? a : null; } catch { return null; }
+}
+// Where a search should look first: the other stop you already picked, then you, then the map.
+function searchNear(key) {
+  const other = state.stops[key === 'to' ? 'from' : 'to'];
+  if (other && Number.isFinite(other.lat)) return { point: other, fromYou: other === state.here };
+  if (state.here) return { point: state.here, fromYou: true };
+  const m = state.map;
+  if (m && m.getZoom() >= 6) { const c = m.getCenter(); return { point: { lat: c.lat, lon: c.lng }, fromYou: false }; }
+  const a = savedArea();
+  return a ? { point: a, fromYou: false } : { point: null, fromYou: false };
+}
+
+function setStop(key, place) {
+  state.stops[key] = place;
+  $(key).value = place ? (place.isHere ? 'Your location' : place.label) : '';
+  syncClear(key);
+  if (place && !place.isHere) saveArea(place);
+}
+function syncClear(key) { document.querySelector(`[data-clear="${key}"]`).hidden = !$(key).value; }
+
+function placeRow(r, onPick) {
+  // Distance is always from you, so the numbers mean the same thing in both boxes.
+  const dist = state.here ? fmtDist(distanceMi(state.here, r)) : '';
+  return el('li', { role: 'option', class: 'place', tabindex: '-1', onpointerdown: (e) => { e.preventDefault(); onPick(r); }, onclick: () => onPick(r) },
+    el('span', { class: `place-ic k-${r.kind || 'place'}` }, icon(KIND_GLYPH[r.kind] || 'pin')),
+    el('span', { class: 'place-txt' }, el('b', { text: r.title }), r.sub ? el('span', { text: r.sub }) : null),
+    dist ? el('span', { class: 'place-dist', text: dist }) : null);
+}
+
+// One results list under the stop fields; while you search, the rest of the form steps aside.
+function wireSearch() {
+  const list = $('placeList'), note = $('searchNote'), form = $('tripForm');
+  let activeKey = null, lastRes = [], seq = 0;
+  const close = () => { list.hidden = true; note.hidden = true; list.replaceChildren(); form.classList.remove('searching'); activeKey = null; };
+  const pick = (r) => {
+    const key = activeKey || 'to';
+    setStop(key, r);
+    close();
+    document.activeElement?.blur?.();
+    if (state.map) state.map.flyTo({ center: [r.lon, r.lat], zoom: Math.max(state.map.getZoom(), 11), offset: isPhone() ? [0, -150] : [210, 0] });
+    if (key === 'from' && !state.stops.to) $('to').focus();
+    else if (isPhone()) snap('fit');
+  };
+  const render = (res, q) => {
+    lastRes = res;
+    list.replaceChildren(...res.map((r) => placeRow(r, pick)));
+    list.hidden = !res.length;
+    note.textContent = res.length ? '' : `Nothing found for "${q}". Try the street address, or add the city.`;
+    note.hidden = !!res.length;
+  };
+  const search = debounce(async (key) => {
+    const input = $(key), q = input.value.trim();
+    if (q.length < 3 || q === 'Your location') { list.hidden = true; note.hidden = true; return; }
+    const my = ++seq, near = searchNear(key);
     try {
-      const res = await state.api.geocode(q, { suggest: true });
-      if (input.value.trim() !== q || document.activeElement !== input) return;
-      list.replaceChildren(...res.map((r) => el('li', { role: 'option', text: r.label, onpointerdown: (e) => {
-        e.preventDefault();
-        input.value = r.label; state.stops[key] = { lat: r.lat, lon: r.lon, label: r.label }; close();
-      } })));
-      list.hidden = !res.length;
-    } catch { close(); }
-  }, 350);
-  input.addEventListener('input', () => { state.stops[key] = null; search(); });
-  input.addEventListener('blur', () => setTimeout(close, 150));
-  input.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+      const res = await state.api.geocode(q, { suggest: true, near: near.point });
+      if (my !== seq || activeKey !== key || input.value.trim() !== q) return;
+      render(res, q);
+    } catch {
+      if (my !== seq) return;
+      list.hidden = true; note.textContent = 'Search isn’t answering right now. Try again in a moment.'; note.hidden = false;
+    }
+  }, 300);
+  for (const key of ['to', 'from']) {
+    const input = $(key);
+    input.addEventListener('focus', () => {
+      activeKey = key; form.classList.add('searching'); form.dataset.searching = key;
+      if (isPhone()) snap('full');
+      if (input.value === 'Your location') input.select();
+      if (input.value.trim().length >= 3 && !state.stops[key]) search(key);
+    });
+    input.addEventListener('input', () => { state.stops[key] = null; syncClear(key); activeKey = key; search(key); });
+    input.addEventListener('blur', () => setTimeout(() => { if (activeKey === key && document.activeElement !== input) { close(); if (isPhone()) snap('fit'); } }, 180));
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { input.blur(); }
+      if (e.key === 'Enter') { e.preventDefault(); if (lastRes.length && !list.hidden) pick(lastRes[0]); }
+    });
+  }
+  for (const b of document.querySelectorAll('[data-clear]')) {
+    b.addEventListener('pointerdown', (e) => e.preventDefault());
+    b.addEventListener('click', () => { const k = b.dataset.clear; setStop(k, null); $(k).focus(); });
+  }
 }
 
 function locate() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) return reject(new Error('Location isn’t available here. Type a starting point.'));
     navigator.geolocation.getCurrentPosition(
-      (pos) => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude, label: 'My location' }),
+      (pos) => {
+        state.here = { lat: pos.coords.latitude, lon: pos.coords.longitude, label: 'Your location', title: 'Your location', isHere: true };
+        saveArea(state.here); showHere();
+        resolve(state.here);
+      },
       () => reject(new Error('Couldn’t get your location. Type a starting point.')),
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 });
   });
 }
 async function useMyLocation() {
   $('locBtn').disabled = true;
-  try { state.stops.from = await locate(); $('from').value = 'My location'; setError(''); }
+  try { setStop('from', await locate()); setError(''); }
   catch (e) { setError(e.message); }
   finally { $('locBtn').disabled = false; }
+}
+// If location is already allowed, use it quietly: center the map on you and bias searches.
+async function quietLocate() {
+  try {
+    const st = navigator.permissions && await navigator.permissions.query({ name: 'geolocation' });
+    if (st && st.state === 'granted') await locate();
+  } catch { /* stays on the saved area */ }
+}
+let hereMarker = null;
+function showHere() {
+  const ml = globalThis.maplibregl;
+  if (!ml || !state.map || !state.here) return;
+  if (!hereMarker) hereMarker = new ml.Marker({ element: el('div', { class: 'here-dot', 'aria-label': 'You are here' }) });
+  hereMarker.setLngLat([state.here.lon, state.here.lat]).addTo(state.map);
+  if (!state.plan) state.map.jumpTo({ center: [state.here.lon, state.here.lat], zoom: Math.max(state.map.getZoom(), 10) });
 }
 
 async function resolveStop(key, inputId) {
   if (state.stops[key]) return state.stops[key];
   const q = $(inputId).value.trim();
-  if (!q) {
-    if (key === 'from') { state.stops.from = await locate(); $('from').value = 'My location'; return state.stops.from; }
+  if (!q || q === 'Your location') {
+    if (key === 'from') { setStop('from', await locate()); return state.stops.from; }
     throw new Error('Where are you headed? Enter a destination.');
   }
-  const res = await state.api.geocode(q);
-  if (!res.length) throw new Error(`Couldn't find "${q}". Try a city and state.`);
-  state.stops[key] = { lat: res[0].lat, lon: res[0].lon, label: res[0].label };
-  $(inputId).value = res[0].label;
+  const res = await state.api.geocode(q, { near: searchNear(key).point });
+  if (!res.length) throw new Error(`Couldn't find "${q}". Try the street address, or add the city.`);
+  setStop(key, res[0]);
   return state.stops[key];
 }
 
@@ -302,13 +390,15 @@ async function initMap() {
   if (!ml) { setError('The map didn’t load. Routing still works; refresh to try again.'); return; }
   ml.setWorkerUrl('vendor/maplibre-gl-csp-worker.js');
   const style = await styleFor(currentMode());
-  const map = new ml.Map({ container: 'map', style, center: [-96, 38.5], zoom: 3.3, attributionControl: { compact: true }, pitchWithRotate: false, dragRotate: false });
+  const area = state.here || savedArea();
+  const map = new ml.Map({ container: 'map', style, center: area ? [area.lon, area.lat] : [-96, 38.5], zoom: area ? 10 : 3.3, attributionControl: { compact: true }, pitchWithRotate: false, dragRotate: false });
   map.addControl(new ml.NavigationControl({ showCompass: false }), 'top-right');
   // style.load fires on first load and after every setStyle (which drops our layers).
   map.on('style.load', () => {
     addMapLayers(map);
     state.mapReady = true;
     if (state.plan) drawPlan(state.plan, { fit: false });
+    showHere();
   });
   map.on('click', 'pois', (e) => { const f = e.features && e.features[0]; if (f) popup(f.geometry.coordinates, f.properties.title, f.properties.detail); });
   map.on('mouseenter', 'pois', () => { map.getCanvas().style.cursor = 'pointer'; });
@@ -469,7 +559,7 @@ async function onSubmit(e) {
     }
   } catch (err) {
     view('plan');
-    if (isPhone()) snap('half');
+    if (isPhone()) snap('fit');
     setError(isNoPath(err) ? 'No truck-legal route between those points with your settings. Try removing a setting.' : err.message || 'Something went wrong.');
   } finally {
     state.busy = false;
@@ -495,20 +585,21 @@ async function main() {
   $('prompt').addEventListener('input', parseSoon);
   $('prompt').addEventListener('change', parseNow);
   $('locBtn').addEventListener('click', useMyLocation);
-  $('editBtn').addEventListener('click', () => { setError(''); view('plan'); if (isPhone()) snap('half'); });
+  $('editBtn').addEventListener('click', () => { setError(''); view('plan'); if (isPhone()) snap('fit'); });
   for (const t of document.querySelectorAll('.seg-btn')) t.addEventListener('click', () => selectTab(t.dataset.tab));
   if (voiceSupported) $('micBtn').addEventListener('click', onMic);
   else {
     $('micBtn').disabled = true;
-    $('micLabel').textContent = 'Type how to run it';
+    $('micLabel').textContent = 'Type how you want it run.';
     $('micBtn').setAttribute('aria-label', 'Voice input isn’t available in this browser');
   }
 
   const [{ api, config }] = await Promise.all([connect(), loadData()]);
   state.api = api; state.config = config;
-  wireSuggest('from', 'fromSuggest', 'from');
-  wireSuggest('to', 'toSuggest', 'to');
+  wireSearch();
+  view('plan');
   initMap();
+  quietLocate();
   if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 

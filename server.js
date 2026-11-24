@@ -11,6 +11,7 @@ import { buildRouteRequest, heightRequest } from './public/js/core/valhalla.js';
 import { buildRestrictionQuery, buildPoiQuery } from './public/js/core/overpass.js';
 import { parsePrompt } from './public/js/core/parser.js';
 import { sanitizeOptions } from './public/js/core/options.js';
+import { fromNominatim, rankPlaces } from './public/js/core/places.js';
 import { llmParse } from './src/llm.js';
 import { RateLimiter, LRU } from './src/limits.js';
 
@@ -152,20 +153,16 @@ export function createServer(cfg = loadConfig(), deps = {}) {
     'GET /api/geocode': async (req, url) => {
       const q = (url.searchParams.get('q') || '').trim();
       if (!GEOCODE_RE.test(q)) throw new HttpError(400, 'Bad search');
-      const key = q.toLowerCase();
+      const lat = Number(url.searchParams.get('lat')), lon = Number(url.searchParams.get('lon'));
+      const near = Number.isFinite(lat) && Number.isFinite(lon) && Math.abs(lat) <= 90 && Math.abs(lon) <= 180 ? { lat, lon } : null;
+      const key = `${q.toLowerCase()}|${near ? `${lat.toFixed(1)},${lon.toFixed(1)}` : ''}`;
       const hit = geoCache.get(key);
       if (hit) return hit;
       const u = new URL(`${cfg.nominatim}/search`);
-      u.search = new URLSearchParams({ q, format: 'jsonv2', limit: '5', countrycodes: 'us,ca,mx', addressdetails: '0' }).toString();
-      const raw = await upstream(cfg, u);
-      const out = (Array.isArray(raw) ? raw : []).slice(0, 5).map((r) => {
-        const bb = (r.boundingbox || []).map(Number); // [s, n, w, e]
-        return {
-          label: String(r.display_name || '').slice(0, 160),
-          lat: +r.lat, lon: +r.lon,
-          bbox: bb.length === 4 && bb.every(Number.isFinite) ? [bb[0], bb[2], bb[1], bb[3]] : null,
-        };
-      }).filter((r) => Number.isFinite(r.lat) && Number.isFinite(r.lon));
+      const params = { q, format: 'jsonv2', limit: '8', countrycodes: 'us,ca,mx,pr', addressdetails: '1' };
+      if (near) Object.assign(params, { viewbox: `${lon - 1},${lat + 1},${lon + 1},${lat - 1}`, bounded: '0' });
+      u.search = new URLSearchParams(params).toString();
+      const out = rankPlaces(fromNominatim(await upstream(cfg, u)), q, near);
       geoCache.set(key, out);
       return out;
     },

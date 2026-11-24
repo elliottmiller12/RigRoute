@@ -8,6 +8,7 @@
 import { buildRouteRequest, heightRequest } from './core/valhalla.js';
 import { buildRestrictionQuery, buildPoiQuery } from './core/overpass.js';
 import { parsePrompt } from './core/parser.js';
+import { fromPhoton, fromNominatim, rankPlaces, textScore, fallbackQuery } from './core/places.js';
 
 const DIRECT = {
   valhalla: 'https://valhalla1.openstreetmap.de',
@@ -54,19 +55,8 @@ function valhalla(action, body) {
 }
 
 /** Photon GeoJSON -> our {label, lat, lon, bbox} results (US, Canada, Mexico). */
-export function readPhoton(raw) {
-  const feats = raw && Array.isArray(raw.features) ? raw.features : [];
-  return feats.map((f) => {
-    const p = (f && f.properties) || {};
-    const c = f && f.geometry && Array.isArray(f.geometry.coordinates) ? f.geometry.coordinates : [];
-    if (p.countrycode && !['US', 'CA', 'MX'].includes(String(p.countrycode).toUpperCase())) return null;
-    const street = p.street ? `${p.housenumber ? `${p.housenumber} ` : ''}${p.street}` : '';
-    const parts = [p.name, street, p.city || p.county, p.state].map((x) => (x == null ? '' : String(x).trim())).filter(Boolean);
-    const label = [...new Set(parts)].join(', ').slice(0, 160);
-    const ex = Array.isArray(p.extent) && p.extent.length === 4 ? p.extent.map(Number) : null;
-    return { label, lat: +c[1], lon: +c[0], bbox: ex && ex.every(Number.isFinite) ? [ex[3], ex[0], ex[1], ex[2]] : null };
-  }).filter((r) => r && r.label && Number.isFinite(r.lat) && Number.isFinite(r.lon) && Math.abs(r.lat) <= 90 && Math.abs(r.lon) <= 180).slice(0, 5);
-}
+// Kept for older callers and tests: Photon GeoJSON -> normalized places.
+export const readPhoton = (raw) => fromPhoton(raw).slice(0, 6);
 
 const post = (url, data) => fetchJson(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
 
@@ -76,7 +66,7 @@ function proxyApi() {
     route: (args) => post('api/route', args),
     height: (line) => post('api/height', { line }),
     overpass: (kind, line) => post('api/overpass', { kind, line }),
-    geocode: (q) => fetchJson(`api/geocode?q=${encodeURIComponent(q)}`),
+    geocode: (q, { near = null } = {}) => fetchJson(`api/geocode?q=${encodeURIComponent(q)}${near ? `&lat=${near.lat.toFixed(4)}&lon=${near.lon.toFixed(4)}` : ''}`),
     parse: (text) => post('api/parse', { text }),
   };
 }
@@ -104,24 +94,32 @@ function directApi() {
     },
     // suggest=true is type-ahead: Photon only. A real search (pressing Route it) falls back to
     // Nominatim once if Photon is down; Nominatim's policy rules it out for type-ahead.
-    geocode: async (q, { suggest = false } = {}) => {
-      const key = q.trim().toLowerCase();
+    // near = {lat, lon}: results around there rank first (your location, your other stop, the map).
+    geocode: async (q, { suggest = false, near = null } = {}) => {
+      const nearKey = near ? `${near.lat.toFixed(1)},${near.lon.toFixed(1)}` : '';
+      const key = `${q.trim().toLowerCase()}|${nearKey}`;
       if (geoCache.has(key)) return geoCache.get(key);
+      const photon = async (text) => {
+        const u = new URL(DIRECT.photon);
+        const params = { q: text, limit: '15', lang: 'en', bbox: '-170,14,-50,72' };
+        if (near) Object.assign(params, { lat: near.lat.toFixed(4), lon: near.lon.toFixed(4), zoom: '10', location_bias_scale: '0.3' });
+        u.search = new URLSearchParams(params).toString();
+        return fromPhoton(await fetchJson(u, { referrerPolicy: 'strict-origin-when-cross-origin' }, 15000));
+      };
       let out;
       try {
-        const u = new URL(DIRECT.photon);
-        u.search = new URLSearchParams({ q, limit: '8', lang: 'en', bbox: '-170,14,-50,72' }).toString();
-        out = readPhoton(await fetchJson(u, { referrerPolicy: 'strict-origin-when-cross-origin' }, 15000));
+        let found = await photon(q);
+        // Nothing matching every word? The last word is often a misspelled town ("cassleberry").
+        const fb = fallbackQuery(q);
+        if (fb && !found.some((p) => textScore(q, p) >= 0.99)) {
+          try { found = found.concat(await photon(fb)); } catch { /* keep what we have */ }
+        }
+        out = rankPlaces(found, q, near);
       } catch (e) {
         if (suggest) throw e;
         const u = new URL(DIRECT.nominatim);
-        u.search = new URLSearchParams({ q, format: 'jsonv2', limit: '5', countrycodes: 'us,ca,mx' }).toString();
-        const raw = await fetchJson(u, { referrerPolicy: 'strict-origin-when-cross-origin' }, 15000);
-        out = (Array.isArray(raw) ? raw : []).slice(0, 5).map((r) => {
-          const bb = (r.boundingbox || []).map(Number);
-          return { label: String(r.display_name || '').slice(0, 160), lat: +r.lat, lon: +r.lon,
-            bbox: bb.length === 4 && bb.every(Number.isFinite) ? [bb[0], bb[2], bb[1], bb[3]] : null };
-        }).filter((r) => Number.isFinite(r.lat) && Number.isFinite(r.lon));
+        u.search = new URLSearchParams({ q, format: 'jsonv2', limit: '8', countrycodes: 'us,ca,mx,pr', addressdetails: '1' }).toString();
+        out = rankPlaces(fromNominatim(await fetchJson(u, { referrerPolicy: 'strict-origin-when-cross-origin' }, 15000)), q, near);
       }
       geoCache.set(key, out);
       return out;

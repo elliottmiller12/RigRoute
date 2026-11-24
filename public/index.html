@@ -41,61 +41,61 @@
   <symbol id="i-sat" viewBox="0 0 24 24"><path d="M4 20 9 15M7 9l8 8M3 13l4-4 8 8-4 4zM13 3l8 8M16 3a5 5 0 0 1 5 5"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></symbol>
+  <symbol id="i-city" viewBox="0 0 24 24"><path d="M3 21V9l6-3v15M9 21V4l6 3v14M15 21V11l6 2v8M2 21h20"/></symbol>
+  <symbol id="i-road" viewBox="0 0 24 24"><path d="M7 3 3 21M17 3l4 18M12 4v3M12 11v3M12 18v2"/></symbol>
   <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".6"/></symbol>
 </svg>
 
 <div id="map" role="region" aria-label="Map"></div>
 
 <header class="hud">
-  <div class="brand" aria-label="RigRoute"><svg class="ic"><use href="#i-truck"/></svg><span>RigRoute</span></div>
-  <div class="hud-right">
-    <button id="modeBtn" class="mode-btn" type="button" aria-label="Switch to day mode"><svg class="ic moon"><use href="#i-moon"/></svg><svg class="ic sun"><use href="#i-sun"/></svg></button>
-    <button id="profileBtn" class="rig-pill" type="button" aria-haspopup="dialog" aria-label="Edit your rig">
-      <span id="profileSummary" class="rig-text">13'6" · 80k lbs</span>
-    </button>
-  </div>
+  <button id="profileBtn" class="rig-pill" type="button" aria-haspopup="dialog" aria-label="Edit your rig">
+    <svg class="ic"><use href="#i-truck"/></svg><span id="profileSummary" class="rig-text">13'6" · 80k lbs</span>
+  </button>
+  <button id="modeBtn" class="mode-btn" type="button" aria-label="Switch to day mode"><svg class="ic moon"><use href="#i-moon"/></svg><svg class="ic sun"><use href="#i-sun"/></svg></button>
 </header>
 
-<aside id="sheet" class="sheet" data-snap="half" aria-label="Trip planner">
+<aside id="sheet" class="sheet" data-snap="fit" aria-label="Trip planner">
   <button class="handle" id="grab" type="button" aria-label="Expand or shrink the panel"><span></span></button>
 
   <div class="sheet-body" id="sheetBody">
     <!-- PLAN -->
     <section id="plan" class="view">
       <form id="tripForm" autocomplete="off" novalidate>
-        <div class="field big-field">
-          <svg class="ic lead"><use href="#i-search"/></svg>
-          <label class="sr" for="to">Destination</label>
-          <input id="to" name="to" type="text" placeholder="Where to?" aria-label="Destination: receiver, city or truck stop" maxlength="120" enterkeyhint="search">
-          <ul class="suggest" id="toSuggest" role="listbox" hidden></ul>
-        </div>
-        <div class="field from-field">
-          <svg class="ic lead small"><use href="#i-dot"/></svg>
-          <label class="sr" for="from">Starting point</label>
-          <input id="from" name="from" type="text" placeholder="Starting point" maxlength="120">
-          <button id="locBtn" type="button" class="icon-btn" aria-label="Start from my location"><svg class="ic"><use href="#i-locate"/></svg></button>
-          <ul class="suggest" id="fromSuggest" role="listbox" hidden></ul>
-        </div>
-
-        <div class="voice">
-          <button id="micBtn" type="button" class="mic" aria-label="Tap and say how to run it">
-            <span class="ring" aria-hidden="true"></span>
-            <svg class="ic mic-on"><use href="#i-mic"/></svg>
-            <svg class="ic mic-off"><use href="#i-stop"/></svg>
-          </button>
-          <div class="voice-copy">
-            <div class="voice-title" id="micLabel">Tap and say how to run it</div>
-            <div class="voice-sub">"No tolls, stay off I-95, I'm hauling hazmat"</div>
+        <div class="stops">
+          <div class="field stop-field" id="toField">
+            <svg class="ic lead"><use href="#i-search"/></svg>
+            <label class="sr" for="to">Destination</label>
+            <input id="to" name="to" type="search" placeholder="Where to?" aria-label="Destination: receiver, address or truck stop" maxlength="120" enterkeyhint="search" autocapitalize="words" spellcheck="false">
+            <button type="button" class="clear-btn" data-clear="to" aria-label="Clear destination" hidden><svg class="ic"><use href="#i-x"/></svg></button>
+          </div>
+          <div class="field stop-field from" id="fromField">
+            <svg class="ic lead small"><use href="#i-dot"/></svg>
+            <label class="sr" for="from">Starting point</label>
+            <input id="from" name="from" type="search" placeholder="From your location" maxlength="120" enterkeyhint="search" autocapitalize="words" spellcheck="false">
+            <button type="button" class="clear-btn" data-clear="from" aria-label="Clear starting point" hidden><svg class="ic"><use href="#i-x"/></svg></button>
+            <button id="locBtn" type="button" class="icon-btn" aria-label="Start from my location"><svg class="ic"><use href="#i-locate"/></svg></button>
           </div>
         </div>
-        <div class="field">
-          <label class="sr" for="prompt">Route preferences</label>
-          <input id="prompt" type="text" maxlength="500" placeholder="…or type it" enterkeyhint="done">
-        </div>
-        <div id="chips" class="chips" aria-live="polite"></div>
-        <p id="promptNote" class="hint" hidden></p>
+        <ul class="results-list" id="placeList" role="listbox" aria-label="Places" hidden></ul>
+        <p class="search-note" id="searchNote" hidden></p>
 
-        <button id="goBtn" class="go" type="submit"><svg class="ic"><use href="#i-route"/></svg><span>Route it</span></button>
+        <div class="plan-rest">
+          <div class="field ask">
+            <label class="sr" for="prompt">How should it run?</label>
+            <input id="prompt" type="text" maxlength="500" placeholder="How should it run? No tolls, avoid I-4…" enterkeyhint="done">
+            <button id="micBtn" type="button" class="mic" aria-label="Say how to run it">
+              <span class="ring" aria-hidden="true"></span>
+              <svg class="ic mic-on"><use href="#i-mic"/></svg>
+              <svg class="ic mic-off"><use href="#i-stop"/></svg>
+            </button>
+          </div>
+          <p class="voice-hint" id="micLabel">Tap the mic and say it, or type it.</p>
+          <div id="chips" class="chips" aria-live="polite"></div>
+          <p id="promptNote" class="hint" hidden></p>
+          <button id="goBtn" class="go" type="submit"><svg class="ic"><use href="#i-route"/></svg><span>Route it</span></button>
+        </div>
       </form>
     </section>
 

@@ -28,7 +28,11 @@ test('readPhoton labels places and drops junk and out-of-area results', () => {
   ] };
   const r = readPhoton(raw);
   assert.equal(r.length, 2);
-  assert.deepEqual(r[0], { label: 'Jacksonville, Florida', lat: 30.3322, lon: -81.6557, bbox: [30.1, -82.05, 30.59, -81.39] });
-  assert.equal(r[1].label, "Love's Travel Stop, 12 Main St, Atlanta, Georgia");
+  assert.equal(r[0].title, 'Jacksonville');
+  assert.equal(r[0].label, 'Jacksonville, FL');
+  assert.deepEqual([r[0].lat, r[0].lon, r[0].bbox], [30.3322, -81.6557, [30.1, -82.05, 30.59, -81.39]]);
+  assert.equal(r[1].title, "Love's Travel Stop");
+  assert.equal(r[1].sub, '12 Main St, Atlanta, GA');
+  assert.equal(r[1].label, "Love's Travel Stop, Atlanta, GA");
   assert.deepEqual(readPhoton(null), []);
 });

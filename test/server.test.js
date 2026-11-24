@@ -119,9 +119,10 @@ test('geocode: validated input, trimmed output, cached', async () => {
   const a = await (await fetch(`${base}/api/geocode?q=Smyrna%20GA`)).json();
   await fetch(`${base}/api/geocode?q=smyrna%20ga`);
   assert.equal(seen.length, 1, 'second lookup served from cache');
-  assert.deepEqual(Object.keys(a[0]).sort(), ['bbox', 'label', 'lat', 'lon']);
+  for (const k of ['title', 'sub', 'label', 'lat', 'lon', 'bbox']) assert.ok(k in a[0], `result has ${k}`);
   assert.deepEqual(a[0].bbox, [33.8, -84.6, 33.9, -84.4]);
   assert.match(seen[0].url, /countrycodes=us%2Cca%2Cmx/);
+  assert.match(seen[0].url, /addressdetails=1/);
 });
 
 test('parse: rules engine without a key', async () => {
